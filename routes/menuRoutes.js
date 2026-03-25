@@ -79,5 +79,5 @@ router.delete('/:id',async(req,res)=>{
     }
 })
 
+// to exports router module
 module.exports=router;
-// adding commants
