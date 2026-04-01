@@ -1,9 +1,19 @@
-const express= require('express');
-const app=express();
-const db= require('./db');
+import dns from 'dns';
+
+import { connectDB } from './db.js';
+import express from 'express';
+// import menuRouter from './routes/menuRoutes.js';
+// import personRouter from './routes/personRoutes.js';
 // first import body-parser in terminal by using 'npm i body-parser'
-const bodyParser = require('body-parser');
+import bodyParser from 'body-parser';
+dns.setDefaultResultOrder('ipv4first');
+
+
+const app=express();
+// const db= require('./db');
 app.use(bodyParser.json()); //req.body have data in last which come from frontend by client
+
+connectDB();
 
 
 app.get('/',(req,res)=>{
@@ -11,11 +21,9 @@ app.get('/',(req,res)=>{
 })
 
 
-const personRouter=require('./routes/personRoutes');
-app.use('/person',personRouter);
+// app.use('/person',personRouter);
 
-const menuRouter=require('./routes/menuRoutes');
-app.use('/menu',menuRouter);
+// app.use('/menu',menuRouter);
 
 app.listen(3000,()=>{
     console.log('listening on port 3000');
