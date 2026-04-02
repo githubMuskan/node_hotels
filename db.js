@@ -1,3 +1,21 @@
+import mongoose from 'mongoose'
+
+export const connectDB = async () => {
+  try {
+    // const MONGO_URI = 'mongodb+srv://muskangarg2890_db_user:muskangarg123456@cluster0.lwmejvk.mongodb.net/'; // 👈 hardcoded
+    const MONGO_URI = 'mongodb://muskangarg2890_db_user:muskangarg123456@cluster0-shard-00-00.lwmejvk.mongodb.net:27017,...'; // 👈 hardcoded
+
+    await mongoose.connect(MONGO_URI);
+
+    console.log('✅ MongoDB Connected');
+  } catch (error) {
+    console.error('❌ MongoDB Connection Error:', error.message);
+    process.exit(1); // Exit if DB fails
+  }
+};
+
+
+
 // // mongoose act as bridge between node.js and database basically it help to connect node.js server to database server 
 // import mongoose from('mongoose');
 // // const mongoose=require('mongoose');
@@ -48,18 +66,3 @@
 // module.exports=db;
 
 
-import mongoose from 'mongoose'
-
-export const connectDB = async () => {
-  try {
-    // const MONGO_URI = 'mongodb+srv://muskangarg2890_db_user:muskangarg123456@cluster0.lwmejvk.mongodb.net/'; // 👈 hardcoded
-    const MONGO_URI = 'mongodb://muskangarg2890_db_user:muskangarg123456@cluster0-shard-00-00.lwmejvk.mongodb.net:27017,...'; // 👈 hardcoded
-
-    await mongoose.connect(MONGO_URI);
-
-    console.log('✅ MongoDB Connected');
-  } catch (error) {
-    console.error('❌ MongoDB Connection Error:', error.message);
-    process.exit(1); // Exit if DB fails
-  }
-};
