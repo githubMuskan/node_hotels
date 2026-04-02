@@ -1,10 +1,12 @@
-import mongoose from 'mongoose'
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+dotenv.config();
 
 export const connectDB = async () => {
   try {
     // const mongoURL = "mongodb://127.0.0.1:27017/hotels";
     // const MONGO_URI = 'mongodb+srv://muskangarg2890_db_user:muskangarg123456@cluster0.lwmejvk.mongodb.net/hotels'; // 👈 hardcoded not working in my system srv
-    const mongoURL ="mongodb://muskangarg2890_db_user:muskangarg123456@ac-glpfwpu-shard-00-00.lwmejvk.mongodb.net:27017,ac-glpfwpu-shard-00-01.lwmejvk.mongodb.net:27017,ac-glpfwpu-shard-00-02.lwmejvk.mongodb.net:27017/?ssl=true&replicaSet=atlas-5awpzp-shard-0&authSource=admin&appName=Cluster0";
+    const mongoURL =process.env.DB_ONLINE_URL; //get .env file variable like this 
     await mongoose.connect(mongoURL);
 
     console.log('✅ MongoDB Connected');

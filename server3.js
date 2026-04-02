@@ -6,7 +6,9 @@ import express from 'express';
 import { connectDB } from './db.js';
 import menuRouter from './routes/menuRoutes.js';
 import personRouter from './routes/personRoutes.js';
-
+import dotenv from 'dotenv';
+dotenv.config();
+const PORT=process.env.PORT ||3000;
 // first import body-parser in terminal by using 'npm i body-parser'
 import bodyParser from 'body-parser';
 
@@ -51,7 +53,6 @@ app.use('/menu', menuRouter);
 // =======================
 // START SERVER
 // =======================
-const PORT = 3000;
 
 app.listen(PORT, () => {
     console.log(`🚀 Server is running on port ${PORT}`);
