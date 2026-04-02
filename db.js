@@ -2,10 +2,10 @@ import mongoose from 'mongoose'
 
 export const connectDB = async () => {
   try {
-    // const MONGO_URI = 'mongodb+srv://muskangarg2890_db_user:muskangarg123456@cluster0.lwmejvk.mongodb.net/'; // 👈 hardcoded
-    const MONGO_URI = 'mongodb://muskangarg2890_db_user:muskangarg123456@cluster0-shard-00-00.lwmejvk.mongodb.net:27017,...'; // 👈 hardcoded
-
-    await mongoose.connect(MONGO_URI);
+    // const mongoURL = "mongodb://127.0.0.1:27017/hotels";
+    // const MONGO_URI = 'mongodb+srv://muskangarg2890_db_user:muskangarg123456@cluster0.lwmejvk.mongodb.net/hotels'; // 👈 hardcoded not working in my system srv
+    const mongoURL ="mongodb://muskangarg2890_db_user:muskangarg123456@ac-glpfwpu-shard-00-00.lwmejvk.mongodb.net:27017,ac-glpfwpu-shard-00-01.lwmejvk.mongodb.net:27017,ac-glpfwpu-shard-00-02.lwmejvk.mongodb.net:27017/?ssl=true&replicaSet=atlas-5awpzp-shard-0&authSource=admin&appName=Cluster0";
+    await mongoose.connect(mongoURL);
 
     console.log('✅ MongoDB Connected');
   } catch (error) {
