@@ -8,7 +8,8 @@ import menuRouter from './routes/menuRoutes.js';
 import personRouter from './routes/personRoutes.js';
 import dotenv from 'dotenv';
 dotenv.config();
-const PORT=process.env.PORT ||3000;
+const PORT=process.env.PORT || 8000;
+// const PORT=process.env.PORT || 3000;
 // first import body-parser in terminal by using 'npm i body-parser'
 import bodyParser from 'body-parser';
 
@@ -54,8 +55,14 @@ app.use('/menu', menuRouter);
 // START SERVER
 // =======================
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, (err) => {
+    if (err) {
+        console.error('Server failed to start:', err);
+        return;
+    }
     console.log(`🚀 Server is running on port ${PORT}`);
+    console.log(`Server listening on http://localhost:${PORT}`);
+    console.log(`Server address:`, server.address());
 });
 
 
