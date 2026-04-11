@@ -65,10 +65,10 @@ const personSchema = new mongoose.Schema({
 // });
 
 // pre-save hook to hash the password before saving the person document to the database
-personSchema.pre('save',async function(next){
+personSchema.pre('save',async function(){
     const person=this;
     // not hash the password only if it has been modified (or is new)
-    if(!person.isModified('password'))return next();
+    if(!person.isModified('password'))return;
     try{
         // Only hash the password if it has been modified (or is new)
         const salt=await bcrypt.genSalt(10); // generate salt with 10 rounds
@@ -78,9 +78,8 @@ personSchema.pre('save',async function(next){
         // replace the plain text password with the hashed password
 
         person.password=hashedPassword;
-        next();
     }catch(error){
-        return next(error);
+        throw error;
     }
 })
 

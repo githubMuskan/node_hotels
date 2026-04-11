@@ -70,7 +70,8 @@ app.get('/',(req, res) => {
 });
 
 // Use routers
-app.use('/person',localAuthenticateMiddleware ,personRouter);
+// app.use('/person',localAuthenticateMiddleware ,personRouter);
+app.use('/person',personRouter);
 app.use('/menu', menuRouter);
 
 // Global error handler for invalid JSON and other middleware errors

@@ -1,12 +1,14 @@
 // Import modules using ES Modules
 import express from 'express';
 import Person from '../models/person.js';
+import {jwtAuthMiddleware,generateToken} from '../models/jwt.js';
+
 
 const router = express.Router();
 
 
 // POST route to add a preson
-router.post('/', async (req, res) => {
+router.post('/signup', async (req, res) => {
     try {
         const data = req.body;
 
@@ -18,7 +20,15 @@ router.post('/', async (req, res) => {
         const response = await newPerson.save();
         console.log('data saved');
 
-        res.status(201).json(response);
+        // Generate a JWT token for the newly created user
+        const payload={
+            id:response.id,
+            username:response.username
+        }
+        const token=generateToken(payload); // Generate a JWT token for the newly created user
+        console.log('JWT token generated:', token);
+        // Send the token back to the client in the response (you can also include user info if needed)
+        res.status(201).json({response:response, token: token});
 
     } catch (err) {
         console.error(err);
@@ -35,6 +45,49 @@ router.post('/', async (req, res) => {
     }
 });
 
+
+// POST route for user login (authentication)
+router.post('/login', async (req, res) => {
+    try {
+        console.log('Login request received:', req.body);
+        
+        // Extract username and password from the request body
+        const { username, password } = req.body;
+        
+        // Validate inputs
+        if (!username || !password) {
+            return res.status(400).json({ error: 'Username and password are required' });
+        }
+        
+        // Find the user in the database by username
+        const user = await Person.findOne({ username: username });
+        
+        // If user is not found, return an error response
+        if (!user) {
+            return res.status(401).json({ error: 'Invalid username or password' });
+        }
+        
+        // Compare passwords
+        const isPasswordValid = await user.comparePassword(password);
+        if (!isPasswordValid) {
+            return res.status(401).json({ error: 'Invalid username or password' });
+        }
+        
+        // If authentication is successful, generate a JWT token for the user
+        const payload = {
+            id: user.id,
+            username: user.username
+        };
+        const token = generateToken(payload); // Generate a JWT token for the authenticated user
+        
+        // Return the token in the response to the client
+        res.status(200).json({ message: 'Login successful', token: token });
+
+    } catch (error) {
+        console.error('Login error:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
 
 // GET method to get the person
 // router.get('/person',async(req,res)=>{
