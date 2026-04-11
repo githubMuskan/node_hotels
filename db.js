@@ -4,9 +4,9 @@ import mongoose from 'mongoose';
 
 export const connectDB = async () => {
   try {
-    // const mongoURL = process.env.DB_LOCAL_URL;
+    const mongoURL = process.env.DB_LOCAL_URL;
     // const MONGO_URI = 'mongodb+srv://muskangarg2890_db_user:muskangarg123456@cluster0.lwmejvk.mongodb.net/hotels'; // 👈 hardcoded not working in my system srv
-    const mongoURL =process.env.DB_ONLINE_URL; //get .env file variable like this 
+    // const mongoURL =process.env.DB_ONLINE_URL; //get .env file variable like this 
     await mongoose.connect(mongoURL);
 
     console.log('✅ MongoDB Connected');

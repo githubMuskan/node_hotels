@@ -8,21 +8,30 @@ const router = express.Router();
 // POST route to add a preson
 router.post('/', async (req, res) => {
     try {
-        const data = req.body; // assume the request body contain the person's data
+        const data = req.body;
 
-        // create a new person document using the Mongoose model
+        if (!data || Object.keys(data).length === 0) {
+            return res.status(400).json({ error: 'Request body is required and must be valid JSON' });
+        }
+
         const newPerson = new Person(data);
-
-        // save the new person to the database
         const response = await newPerson.save();
         console.log('data saved');
 
-        // 201 → created
         res.status(201).json(response);
 
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Internal server Error' });
+
+        if (err.name === 'ValidationError') {
+            return res.status(400).json({ error: 'Validation failed', details: err.errors });
+        }
+
+        if (err.code === 11000) {
+            return res.status(400).json({ error: 'Duplicate field value', details: err.keyValue });
+        }
+
+        res.status(500).json({ error: 'Internal server error' });
     }
 });
 
