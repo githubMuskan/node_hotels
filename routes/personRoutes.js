@@ -1,7 +1,7 @@
 // Import modules using ES Modules
 import express from 'express';
 import Person from '../models/person.js';
-import {jwtAuthMiddleware,generateToken} from '../models/jwt.js';
+import {jwtAuthMiddleware,generateToken} from '../jwt.js';
 
 
 const router = express.Router();
@@ -91,7 +91,7 @@ router.post('/login', async (req, res) => {
 
 // GET method to get the person
 // router.get('/person',async(req,res)=>{
-router.get('/', async (req, res) => {
+router.get('/',jwtAuthMiddleware, async (req, res) => {
     try {
         const data = await Person.find();
         console.log('data fetched');
@@ -104,6 +104,24 @@ router.get('/', async (req, res) => {
     }
 });
 
+// GET route to get user profile (protected route, requires JWT authentication)
+router.get('/profile', jwtAuthMiddleware, async (req, res) => {
+    try{
+        console.log('Profile route hit');
+        // The jwtAuthMiddleware will verify the token and attach the decoded user information to req.user
+        const userData=req.user; // Access the decoded user information from the request object
+        console.log('Authenticated user data:', userData);
+        const userId=userData.id; // Get the user ID from the decoded token
+        const user= await Person.findById(userId); // Fetch the user profile from the database using the user ID
+        if(!user){
+            return res.status(404).json({error:'User not found'});
+        }
+        res.status(200).json({profile:user}); // Return the user profile in the response
+    }catch(error){
+        console.error('Error fetching user profile:', error);
+        res.status(500).json({error:'Internal server error'});
+    }
+});
 
 // /:workType in this "workType" is a variable name which define the key or value you want data 
 // 🔥 FIX: changed route to '/work/:workType' to avoid conflict with '/:id'
